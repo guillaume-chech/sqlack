@@ -1,5 +1,6 @@
 node_modules
 .serverless
 .vscode
+*/__pycache__
 __pycache__
 command.txt

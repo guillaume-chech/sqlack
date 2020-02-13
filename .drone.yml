@@ -8,8 +8,8 @@ steps:
     image: python:3.7
     commands:
       - pip install -r test/dev-requirements.txt
-      - flake8 ingestion/ --verbose
-      - flake8 lambda.py --verbose
+      - flake8 pg_client/ --verbose
+      - flake8 handler.py --verbose
       
   - name: serverless-lint
     image: node:alpine
@@ -29,7 +29,7 @@ steps:
     image: python:3.7
     commands:
       - pip install -r requirements.txt -t requirements
-      - mv requirements/* ./
+      # - mv requirements/* ./
     when:
       event: push
       branch: [develop, master]
