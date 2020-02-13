@@ -1,5 +1,5 @@
 import psycopg2
-from psycopg2 import extras
+from psycopg2.extras import DictCursor # silence linter
 from utils.lambda_logger import LambdaLogger
 
 
@@ -44,7 +44,7 @@ class PGClient(object):
 
         Arguments:
             query {[type]} -- [description]
-            
+
         Returns:
             [type] -- [description]
         """
