@@ -1,7 +1,9 @@
 
 import os
+import json
 from pg_client.pg_client import PGClient
 from utils.lambda_logger import LambdaLogger
+from urllib.parse import parse_qs
 # from tabulate import tabulate
 
 
@@ -25,19 +27,27 @@ def endpoint(event, context):
              'username': os.environ['DB_USERNAME'], 'password': os.environ['DB_PASSWORD']}
     print(creds)
     try:
-        query = event
+        print(event)
+        params = parse_qs(event['body'])
+        query = params.get('text', [None])[0]
         print(query)
         client = PGClient(creds)
         result = client.execute_query(query)
         response = {
-            "statusCode": 200,
-            "result": result
+            'statusCode': 200,
+            'body': json.dumps(result),
+            'headers': {
+                'Content-Type': 'application/json',
+            },
             # "result": tabulate(tabular_data=result["data"], headers=result["headers"], tablefmt="psql")
         }
         return response
 
     except Exception as e:
         response = {
-            "statusCode": 200,
-            "error": "Invalid query :  {}".format(e)}
+            'statusCode': 400,
+            'body': 'Invalid query :  {}'.format(e),
+            'headers': {
+                'Content-Type': 'application/json'},
+        }
         return response
