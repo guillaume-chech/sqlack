@@ -1,3 +1,4 @@
 psycopg2-binary==2.8.4
 tabulate==0.8.6
 flake8==3.7.9
+nose
