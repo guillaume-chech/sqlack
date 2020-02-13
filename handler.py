@@ -2,7 +2,7 @@
 import os
 from pg_client.pg_client import PGClient
 from utils.lambda_logger import LambdaLogger
-from tabulate import tabulate
+# from tabulate import tabulate
 
 
 def endpoint(event, context):
@@ -31,7 +31,8 @@ def endpoint(event, context):
         result = client.execute_query(query)
         response = {
             "statusCode": 200,
-            "result": tabulate(tabular_data=result["data"], headers=result["headers"], tablefmt="psql")
+            "result": result
+            # "result": tabulate(tabular_data=result["data"], headers=result["headers"], tablefmt="psql")
         }
         return response
 
