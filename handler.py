@@ -7,11 +7,11 @@ from tabulate import tabulate
 
 def endpoint(event, context):
     """[summary]
-    
+
     Arguments:
         event {[type]} -- [description]
         context {[type]} -- [description]
-    
+
     Returns:
         [type] -- [description]
     """
@@ -21,7 +21,8 @@ def endpoint(event, context):
         'message': 'Received Sqlack command',
         'event': event
     })
-    creds = {'host':os.environ['DB_HOST'],'db_name':os.environ['DB_NAME'],'port':os.environ['DB_PORT'],'username':os.environ['DB_USERNAME'],'password':os.environ['DB_PASSWORD']}
+    creds = {'host': os.environ['DB_HOST'], 'db_name': os.environ['DB_NAME'], 'port': os.environ['DB_PORT'],
+             'username': os.environ['DB_USERNAME'], 'password': os.environ['DB_PASSWORD']}
     print(creds)
     try:
         query = event
