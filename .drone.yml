@@ -1,0 +1,128 @@
+
+
+  - name: build
+    image: python:2.7
+    commands:
+      - pip install -r requirements.txt -t requirements
+      - mv requirements/* ./
+    when:
+      event: push
+      branch: [develop, master]
+
+  - name: deploy-dev
+    image: node:alpine
+    commands:
+      - npm install -g serverless
+      - npm install
+      - serverless deploy -s dev --verbose
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+    when:
+      status: success
+      event: push
+      branch: [develop,upgrade-drone-config]
+
+  - name: deploy-prod
+    image: node:alpine
+    commands:
+      - npm install -g serverless
+      - npm install
+      - serverless deploy -s prod --verbose
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+    when:
+      status: success
+      event: push
+      branch: master
+
+  - name: notify
+    image: plugins/slack
+    settings:
+      channel: dev-data-eng-notif
+      webhook: https://hooks.slack.com/services/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
+      username: drone
+    when:
+      status: [ success, failure ]
+      event: [ push, pull_request ]
+---
+kind: pipeline
+type: docker
+name: lambda-braze-segment-source
+
+steps:
+  - name: lint
+    image: python:3.7
+    commands:
+      - pip install -r test/dev-requirements.txt
+      - flake8 ingestion/ --verbose
+      - flake8 lambda.py --verbose
+      
+  - name: serverless-lint
+    image: node:alpine
+    commands:
+      - npm install -g serverless
+      - npm install
+      - serverless package -s ci-lint --verbose
+
+  - name: test
+    image: python:3.7
+    commands:
+      - pip install -r requirements.txt
+      - pip install -r test/dev-requirements.txt
+      - nosetests -v --with-coverage --cover-package ingestion --cover-min-percentage=50
+
+  - name: build
+    image: python:3.7
+    commands:
+      - pip install -r requirements.txt -t requirements
+      - mv requirements/* ./
+    when:
+      event: push
+      branch: [develop, master]
+
+  - name: deploy-dev
+    image: node:alpine
+    commands:
+      - npm install -g serverless
+      - npm install
+      - serverless deploy -s dev --verbose
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+    when:
+      status: success
+      event: push
+      branch: develop
+
+  -name: deploy-prod
+    image: node:alpine
+    commands:
+      - npm install -g serverless
+      - npm install
+      - serverless deploy -s prod --verbose
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+    when:
+      status: success
+      event: push
+      branch: master
+
+  notify:
+    image: plugins/slack
+    channel: guillaume
+    webhook: https://hooks.slack.com/services/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
+    username: drone
+    when:
+      status: [ success, failure ]
+      event: [ push, pull_request ]
