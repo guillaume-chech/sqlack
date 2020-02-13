@@ -121,7 +121,8 @@ steps:
   notify:
     image: plugins/slack
     channel: guillaume
-    webhook: https://hooks.slack.com/services/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
+    webhook:
+      from_secret: org_slack_webhook
     username: drone
     when:
       status: [ success, failure ]
