@@ -2,14 +2,71 @@ service: sqlack
 
 frameworkVersion: ">=1.2.0 <2.0.0"
 
+package:
+  individually: true
+
 provider:
   name: aws
   runtime: python3.7
+  region: eu-west-1
+  stage: dev
+  stackName: ${self:service.name}-${self:custom.myStage}-stack
+  memorySize: 512
+  timeout: 30
+  versionFunctions: true
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+        - ec2:CreateNetworkInterface
+        - ec2:DescribeNetworkInterfaces
+        - ec2:DeleteNetworkInterface
+      Resource: "*"
+#    - Effect: "Allow"
+#      Action:
+#        - sns:Publish
+#      Resource:
+#        Ref: AwsAlertsAlarm
+
+  vpc:
+    securityGroupIds:
+      - sg-083365429694ed371
+      - sg-0c9ffd574970ed705
+    subnetIds:
+      - subnet-034847e9126303e38
+      - subnet-0248edcf49354430d
+  environment:
+    CONSUMPTION_TIME_THRESHOLD_MS: 60000
+    DB_HOST: ${self:custom.secrets.DB_CREDENTIALS.host}
+    DB_PORT: ${self:custom.secrets.DB_CREDENTIALS.port}
+    DB_NAME: ${self:custom.secrets.DB_CREDENTIALS.db_name}
+    DB_USERNAME: ${self:custom.secrets.DB_CREDENTIALS.username}
+    DB_PASSWORD: ${self:custom.secrets.DB_CREDENTIALS.password}
+    MEMORY_THRESHOLD: 0.90
+    LOG_LEVEL: ${self:custom.myEnvironment.LOG_LEVEL.${self:custom.myStage}}
+
+custom:
+  secrets: ${file(secrets.${opt:stage, self:provider.stage}.yml)}
+  myEnvironment:
+    LOG_LEVEL:
+      prod: INFO
+      dev: DEBUG
+      local : DEBUG
+  myMonitoringEnabled:
+    prod: true
+    dev: false
+  myStage: ${opt:stage, self:provider.stage}
+  stages:
+    - prod
+    - dev
+    - local
 
 functions:
-  currentTime:
+  sqlackClient:
     handler: handler.endpoint
     events:
       - http:
-          path: ping
-          method: get
+          path: query
+          method: post
