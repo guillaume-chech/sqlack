@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: lambda-braze-segment-source
+name: sqlack
 
 steps:
   - name: lint
