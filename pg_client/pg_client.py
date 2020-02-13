@@ -1,5 +1,4 @@
 import psycopg2
-import tabulate
 from psycopg2 import extras
 from utils.lambda_logger import LambdaLogger
 
