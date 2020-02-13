@@ -6,10 +6,10 @@ from utils.lambda_logger import LambdaLogger
 class PGClient(object):
     """Class responsible to handle communciation with PostgreSQL databases.
     Handles establishing connection and executing query passed to the execute_query method.
-    
+
     Arguments:
         object {[type]} -- [description]
-    
+
     Returns:
         [type] -- [description]
     """
@@ -25,7 +25,7 @@ class PGClient(object):
 
     def create_connection(self):
         """[summary]
-        
+
         Returns:
             [type] -- [description]
         """
@@ -41,10 +41,10 @@ class PGClient(object):
 
     def execute_query(self, query):
         """[summary]
-        
+
         Arguments:
             query {[type]} -- [description]
-        
+            
         Returns:
             [type] -- [description]
         """
