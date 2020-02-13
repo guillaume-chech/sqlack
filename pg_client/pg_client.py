@@ -1,5 +1,5 @@
 import psycopg2
-from psycopg2.extras import DictCursor # silence linter
+from psycopg2.extras import DictCursor  # noqa
 from utils.lambda_logger import LambdaLogger
 
 
