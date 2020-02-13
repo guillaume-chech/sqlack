@@ -66,11 +66,11 @@ steps:
       event: push
       branch: master
 
-  - name: notify
-    image: plugins/slack
-    channel: guillaume
-    webhook: https://hooks.slack.com/services/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
-    username: drone
-    when:
-      status: [ success, failure ]
-      event: [ push, pull_request ]
+  # - name: notify
+  #   image: plugins/slack
+  #   channel: guillaume
+  #   webhook: https://hooks.slack.com/services/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
+  #   username: drone
+  #   when:
+  #     status: [ success, failure ]
+  #     event: [ push, pull_request ]
