@@ -50,7 +50,7 @@ steps:
       event: push
       branch: develop
 
-  -name: deploy-prod
+  - name: deploy-prod
     image: node:alpine
     commands:
       - npm install -g serverless
@@ -66,7 +66,7 @@ steps:
       event: push
       branch: master
 
-  notify:
+  - name: notify
     image: plugins/slack
     channel: guillaume
     webhook:
