@@ -110,19 +110,19 @@ def query_runner(event, context):
             },
             # "result": tabulate(tabular_data=result["data"], headers=result["headers"], tablefmt="psql")
         }
-        response_url=cmd_params['response_url']
+        response_url = cmd_params['response_url']
 
-        requests.post(response_url,data=response_body)
+        requests.post(response_url, data=response_body)
 
         return response_body
 
     except Exception as e:
-        response_url=cmd_params['response_url']
+        response_url = cmd_params['response_url']
         response_body = {
             'statusCode': 400,
             'body': 'Invalid query :  {}'.format(e),
             'headers': {
                 'Content-Type': 'application/json'},
         }
-        requests.post(response_url,data=response_body)
+        requests.post(response_url, data=response_body)
         return response_body
