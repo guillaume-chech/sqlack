@@ -17,6 +17,7 @@ provider:
   iamRoleStatements:
     - Effect: "Allow"
       Action:
+        - lambda:InvokeFunction
         - logs:CreateLogGroup
         - logs:CreateLogStream
         - logs:PutLogEvents
@@ -64,9 +65,12 @@ custom:
     - local
 
 functions:
-  sqlackClient:
-    handler: handler.endpoint
+  sqlackGateway:
+    handler: handler.gateway
     events:
       - http:
           path: query
           method: post
+  sqlackRunner:
+    handler: handler.query_runner
+    
