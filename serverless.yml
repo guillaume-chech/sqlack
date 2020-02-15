@@ -63,6 +63,8 @@ custom:
     - prod
     - dev
     - local
+  pythonRequirements:
+    dockerizePip: false
 
 functions:
   sqlackGateway:
@@ -73,4 +75,9 @@ functions:
           method: post
   sqlackRunner:
     handler: handler.query_runner
+
+plugins:
+  - serverless-python-requirements
+
+
     
