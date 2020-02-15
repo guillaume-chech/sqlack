@@ -65,7 +65,7 @@ custom:
     - local
   pythonRequirements:
     dockerizePip: false
-    pythonBin: /usr/local/bin/python3
+    pythonBin: /opt/anaconda3/envs/Basic/bin/python
 
 functions:
   sqlackGateway:
