@@ -5,3 +5,5 @@ node_modules
 __pycache__
 command.txt
 test_request.json
+secrets.dev.yml
+sectets.prod.yml

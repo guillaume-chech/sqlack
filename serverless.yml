@@ -45,6 +45,7 @@ provider:
     DB_NAME: ${self:custom.secrets.DB_CREDENTIALS.db_name}
     DB_USERNAME: ${self:custom.secrets.DB_CREDENTIALS.username}
     DB_PASSWORD: ${self:custom.secrets.DB_CREDENTIALS.password}
+    SLACK_VERIFICATION_TOKEN: ${self:custom.secrets.SLACK_VERIFICATION_TOKEN}
     MEMORY_THRESHOLD: 0.90
     LOG_LEVEL: ${self:custom.myEnvironment.LOG_LEVEL.${self:custom.myStage}}
 
@@ -68,13 +69,13 @@ custom:
 
 functions:
   sqlackGateway:
-    handler: handler.gateway
+    handler: gateway.handler
     events:
       - http:
           path: query
           method: post
   sqlackRunner:
-    handler: handler.query_runner
+    handler: runner.handler
 
 plugins:
   - serverless-python-requirements
