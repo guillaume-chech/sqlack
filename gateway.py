@@ -19,7 +19,7 @@ def parse_cmd_txt(cmd_txt):
     # so we must force the user to encapsulate the query in a snippet
     if cmd_txt[0]!='`'or cmd_txt[0]!='`':
         return False, "Don't forget to pass your query with tild around it, like this `my_query`"
-    return True, cmd_txt
+    return True, cmd_txt.replace('`','')
 
 
 def respond(res, err=None):
