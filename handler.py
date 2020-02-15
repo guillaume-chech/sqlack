@@ -7,8 +7,7 @@ from botocore.exceptions import ClientError
 from pg_client.pg_client import PGClient
 from utils.lambda_logger import LambdaLogger
 from urllib.parse import parse_qs
-
-# from tabulate import tabulate
+from tabulate import tabulate
 
 
 def gateway(event, context):
@@ -29,7 +28,7 @@ def gateway(event, context):
     })
 
     cmd_params = parse_qs(event['body'])
-    query = cmd_params.get('text', [None])[0]
+    query = cmd_params.get('text', [None])[0].replace('`', '')
 
     logger.info({
         'message': 'Query to be forwarded to runner',
@@ -52,11 +51,10 @@ def gateway(event, context):
         })
         response = {
             'statusCode': 200,
-            'body': json.dumps("Hold on to your D !"),
+            'body': json.dumps("Executing query : /n ```{}```".format(query)),
             'headers': {
                 'Content-Type': 'application/json',
-            },
-            # "result": tabulate(tabular_data=result["data"], headers=result["headers"], tablefmt="psql")
+            }
         }
         return response
     except ClientError as e:
@@ -85,7 +83,7 @@ def query_runner(event, context):
     Returns:
         [type] -- [description]
     """
-    # LambdaLogger().setup(os.environ['LOG_LEVEL'], context)
+    LambdaLogger().setup(os.environ['LOG_LEVEL'], context)
     logger = LambdaLogger()
     logger.info({
         'message': 'Received Sqlack command from gateway',
@@ -93,36 +91,32 @@ def query_runner(event, context):
     })
     creds = {'host': os.environ['DB_HOST'], 'db_name': os.environ['DB_NAME'], 'port': os.environ['DB_PORT'],
              'username': os.environ['DB_USERNAME'], 'password': os.environ['DB_PASSWORD']}
+    cmd_params = event['cmd_params']
+    response_url = cmd_params['response_url'][0]
+
     try:
-        cmd_params = event['cmd_params']
         query = event['query']
         client = PGClient(creds)
         logger.info({
             'message': 'Executing query',
             'query': query
         })
+
         result = client.execute_query(query)
         response_body = {
-            'statusCode': 200,
-            'body': json.dumps(result),
-            'headers': {
-                'Content-Type': 'application/json',
-            },
-            # "result": tabulate(tabular_data=result["data"], headers=result["headers"], tablefmt="psql")
+            'response_type': 'in_channel',
+            'text': "```" + tabulate(tabular_data=result["data"], headers=result["headers"], tablefmt="psql") + "```"
         }
-        response_url = cmd_params['response_url']
 
-        requests.post(response_url, data=response_body)
+        requests.post(response_url, json=response_body)
 
         return response_body
 
     except Exception as e:
-        response_url = cmd_params['response_url']
+        response_url = cmd_params['response_url'][0]
         response_body = {
-            'statusCode': 400,
-            'body': 'Invalid query :  {}'.format(e),
-            'headers': {
-                'Content-Type': 'application/json'},
+            'response_type': 'in_channel',
+            'text': 'Invalid query :  {}'.format(e)
         }
-        requests.post(response_url, data=response_body)
+        requests.post(response_url, json=response_body)
         return response_body
