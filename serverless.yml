@@ -40,11 +40,11 @@ provider:
       - subnet-0248edcf49354430d
   environment:
     CONSUMPTION_TIME_THRESHOLD_MS: 60000
-    DB_HOST: ${self:custom.secrets.DB_CREDENTIALS.host}
-    DB_PORT: ${self:custom.secrets.DB_CREDENTIALS.port}
-    DB_NAME: ${self:custom.secrets.DB_CREDENTIALS.db_name}
-    DB_USERNAME: ${self:custom.secrets.DB_CREDENTIALS.username}
-    DB_PASSWORD: ${self:custom.secrets.DB_CREDENTIALS.password}
+    DB_HOST: ${self:custom.secrets.DB_HOST}
+    DB_PORT: ${self:custom.secrets.DB_PORT}
+    DB_NAME: ${self:custom.secrets.DB_NAME}
+    DB_USERNAME: ${self:custom.secrets.DB_USERNAME}
+    DB_PASSWORD: ${self:custom.secrets.DB_PASSWORD}
     SLACK_VERIFICATION_TOKEN: ${self:custom.secrets.SLACK_VERIFICATION_TOKEN}
     MEMORY_THRESHOLD: 0.90
     LOG_LEVEL: ${self:custom.myEnvironment.LOG_LEVEL.${self:custom.myStage}}

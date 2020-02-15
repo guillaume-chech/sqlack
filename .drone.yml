@@ -32,7 +32,11 @@ steps:
     commands:
       - npm install -g serverless
       - npm install
-      - echo $SECRETS >> secrets.dev.yml
+      - echo $DB_HOST >> secrets.dev.yml
+      - echo $DB_PORT >> secrets.dev.yml
+      - echo $DB_NAME >> secrets.dev.yml
+      - echo $DB_USERNAME >> secrets.dev.yml
+      - echo $DB_PASSWORD >> secrets.dev.yml
       - serverless deploy -s dev --verbose
 
     environment:
@@ -40,8 +44,16 @@ steps:
         from_secret: aws_access_key_id
       AWS_SECRET_ACCESS_KEY:
         from_secret: aws_secret_access_key
-      SECRETS:
-        from_secret: secrets
+      DB_HOST: 
+        from_secret: db_host_dev
+      DB_PORT:
+        from_secret: db_port_dev
+      DB_NAME:
+        from_secret: db_name_dev
+      DB_USERNAME:
+        from_secret: db_username_dev
+      DB_PASSWORD:
+        from_secret: db_password_dev
         
     when:
       status: success
@@ -53,15 +65,27 @@ steps:
     commands:
       - npm install -g serverless
       - npm install
-      - echo $SECRETS >> secrets.prod.yml
+      - echo $DB_HOST >> secrets.prod.yml
+      - echo $DB_PORT >> secrets.prod.yml
+      - echo $DB_NAME >> secrets.prod.yml
+      - echo $DB_USERNAME >> secrets.prod.yml
+      - echo $DB_PASSWORD >> secrets.prod.yml
       - serverless deploy -s prod --verbose
     environment:
       AWS_ACCESS_KEY_ID:
         from_secret: aws_access_key_id
       AWS_SECRET_ACCESS_KEY:
         from_secret: aws_secret_access_key
-      SECRETS:
-        from_secret : secrets
+      DB_HOST: 
+        from_secret: db_host_prod
+      DB_PORT:
+        from_secret: db_port_prod
+      DB_NAME:
+        from_secret: db_name_prod
+      DB_USERNAME:
+        from_secret: db_username_prod
+      DB_PASSWORD:
+        from_secret: db_password_prod
     when:
       status: success
       event: push
