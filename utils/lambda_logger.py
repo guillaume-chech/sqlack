@@ -11,7 +11,7 @@ class LambdaContextFilter(logging.Filter):
 
     def filter(self, record):
         """
-        Dynamically enrich the logs with information inherited from the lambda context
+        Dynamically enrich the logs with information  inherited from the lambda context
         :param record:
         :return:
         """

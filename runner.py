@@ -31,7 +31,7 @@ def respond(response_url, data_body, err_body=None):
 
 
 def handler(event, context):
-    """Handles event coming from the gateway, parses the event, set up a PGclient, execute the query
+    """Handles event coming from the gateway, parses the event,  set up a PGclient, execute the query
     and then respond to Slack
 
     Arguments:

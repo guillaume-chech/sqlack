@@ -14,7 +14,7 @@ def is_request_valid(cmd_params):
 
 def parse_cmd_txt(cmd_txt):
     if cmd_txt is None:
-        return False, "Query is empty"
+        return False, "Query is empty!"
     # Slack does not forward single quote as single quote unless encapsulated in code snippet
     # so we must force the user to encapsulate the query in a snippet
     if cmd_txt[0]!='`'or cmd_txt[0]!='`':
