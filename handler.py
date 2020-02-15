@@ -28,7 +28,7 @@ def gateway(event, context):
     })
 
     cmd_params = parse_qs(event['body'])
-    query = cmd_params.get('text', [None])[0].replace('`','')
+    query = cmd_params.get('text', [None])[0].replace('`', '')
 
     logger.info({
         'message': 'Query to be forwarded to runner',
