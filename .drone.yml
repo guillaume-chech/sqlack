@@ -10,13 +10,6 @@ steps:
       - pip install -r test/dev-requirements.txt
       - flake8 pg_client/ --verbose
       - flake8 handler.py --verbose
-      
-  - name: serverless-lint
-    image: node:alpine
-    commands:
-      - npm install -g serverless
-      - npm install
-      - serverless package -s ci-lint --verbose
 
   - name: test
     image: python:3.7
@@ -39,12 +32,17 @@ steps:
     commands:
       - npm install -g serverless
       - npm install
+      - echo $SECRETS >> secrets.dev.yml
       - serverless deploy -s dev --verbose
+
     environment:
       AWS_ACCESS_KEY_ID:
         from_secret: aws_access_key_id
       AWS_SECRET_ACCESS_KEY:
         from_secret: aws_secret_access_key
+      SECRETS:
+        from_secret: secrets
+        
     when:
       status: success
       event: push
@@ -55,12 +53,15 @@ steps:
     commands:
       - npm install -g serverless
       - npm install
+      - echo $SECRETS >> secrets.prod.yml
       - serverless deploy -s prod --verbose
     environment:
       AWS_ACCESS_KEY_ID:
         from_secret: aws_access_key_id
       AWS_SECRET_ACCESS_KEY:
         from_secret: aws_secret_access_key
+      SECRETS:
+        from_secret : secrets
     when:
       status: success
       event: push
