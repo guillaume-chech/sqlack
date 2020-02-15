@@ -33,6 +33,7 @@ steps:
       - npm install -g serverless
       - npm install
       - echo $SECRETS >> secrets.dev.yml
+      - cat secrets.dev.yml
       - serverless deploy -s dev --verbose
 
     environment:
