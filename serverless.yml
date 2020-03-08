@@ -65,7 +65,7 @@ custom:
     - dev
     - local
   pythonRequirements:
-    dockerizePip: true
+    dockerizePip: false
 
 functions:
   sqlackGateway:
